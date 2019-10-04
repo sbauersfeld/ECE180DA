@@ -10,7 +10,7 @@ if not video_capture.isOpened():
 ret, frame = video_capture.read()
 
 # Save picture
-cv2.imwrite('selfie.jpg', frame)
+cv2.imwrite('selfie.png', frame)
 
 # Close device
 video_capture.release()
