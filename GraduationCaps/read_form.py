@@ -34,7 +34,7 @@ def GetData(google_sheet="Graduation Localization Form (Responses)", sheet_key="
 
     data.rename(columns=column_names, index=row_names, inplace=True)
     data.timestamp = pd.to_datetime(data.timestamp)
-    print(data.head())
+    print("Data Summary:\n{}\n".format(data.head()))
     return data
 
 def GetCoords(data, start_idx=0):
@@ -55,15 +55,24 @@ def GetCoords(data, start_idx=0):
     stack = [next_id]
     localization_info[next_id] = [depth, width]
     visited = set()
+    errors = []
+    directions = ['front', 'right', 'behind', 'left']
     while len(stack) != 0:
         cur_id = stack[-1]
         stack.pop()
-        neighbors = data.loc[cur_id, ['front', 'right', 'behind', 'left']]
+        neighbors = data.loc[cur_id, directions]
         for idx, next_id in enumerate(neighbors):
-            if next_id != 0 and next_id not in visited:
+            if next_id != 0:
+                if next_id not in data.index:
+                    errors.append("{} thinks {} is {}, but {} does not exist in the data set".format(cur_id, next_id, directions[idx], next_id))
+                    continue
+                pre_id = data.loc[next_id, directions[(idx + 2) % 4]]
+                if pre_id != cur_id:
+                    errors.append("{} thinks {} is {}, but {} thinks {} is {}".format(cur_id, next_id, directions[idx], next_id, pre_id, directions[(idx + 2) % 4]))
+                    continue # should we continue here?
                 new_depth = localization_info[cur_id][0]
                 new_width = localization_info[cur_id][1]
-                if idx == 0: # TODO: add check to ensure that information is consistent here
+                if idx == 0:
                     new_depth -= 1
                 elif idx == 1:
                     new_width += 1
@@ -73,8 +82,9 @@ def GetCoords(data, start_idx=0):
                     new_width -= 1
                 min_depth = min(min_depth, new_depth)
                 min_width = min(min_width, new_width)
-                localization_info[next_id] = [new_depth, new_width]
-                stack.append(next_id)
+                if next_id not in visited:
+                    localization_info[next_id] = [new_depth, new_width]
+                    stack.append(next_id)
         visited.add(cur_id)
 
     num_rows = 0
@@ -86,14 +96,18 @@ def GetCoords(data, start_idx=0):
         num_rows = max(num_rows, localization_info[key][0])
         num_cols = max(num_cols, localization_info[key][1])
 
-    return localization_info, num_rows, num_cols
+    return localization_info, num_rows, num_cols, errors
 
 def main():
         data = GetData()
-        localization_info, num_rows, num_cols = GetCoords(data)
-        print(localization_info)
-        print(num_rows)
-        print(num_cols)
+        localization_info, num_rows, num_cols, errors = GetCoords(data)
+        if len(errors):
+            print("Errors:\n{}\n".format(errors))
+
+        print("Localization Results:")
+        print("Id -> coordinate map:", localization_info)
+        print("Number of rows:", num_rows)
+        print("Number of columns:", num_cols)
 
 if __name__ == '__main__':
     main()
