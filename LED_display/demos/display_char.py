@@ -14,7 +14,7 @@ W, H = (width, height)
 
 # Draw text and output pixel data
 im = Image.new("1", (W, H), 0)
-font = ImageFont.truetype("arial.ttf", 10)
+font = ImageFont.truetype("arial.ttf", height)
 draw = ImageDraw.Draw(im)
 w, h = draw.textsize(message, font)
 draw.text(((W-w)/2, (H-h)/2 - h/6), message, fill=1, font=font)
