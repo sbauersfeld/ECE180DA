@@ -1,6 +1,7 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
+import numpy as np
 
 def GetData(google_sheet="Graduation Localization Form (Responses)", sheet_key="../../ece180-a1520813da23.json"):
     '''
@@ -96,18 +97,33 @@ def GetCoords(data, start_idx=0):
         num_rows = max(num_rows, localization_info[key][0])
         num_cols = max(num_cols, localization_info[key][1])
 
-    return localization_info, num_rows, num_cols, errors
+    return localization_info, num_rows + 1, num_cols + 1, errors
+
+def test_wrapper(data):
+    localization_info, num_rows, num_cols, errors = GetCoords(data)
+    if len(errors):
+        print("Errors:\n{}\n".format(errors))
+
+    print("Localization Results:")
+    print("Id -> coordinate map:", localization_info)
+    print("Number of rows:", num_rows)
+    print("Number of columns:", num_cols)
+    print()
 
 def main():
         data = GetData()
-        localization_info, num_rows, num_cols, errors = GetCoords(data)
-        if len(errors):
-            print("Errors:\n{}\n".format(errors))
+        test_wrapper(data)
 
-        print("Localization Results:")
-        print("Id -> coordinate map:", localization_info)
-        print("Number of rows:", num_rows)
-        print("Number of columns:", num_cols)
+        index = range(1, 6)
+        columns = ["timestamp", "id", "front", "right", "behind", "left"]
+        fronts = np.array([0, 1, 2, 3, 0])
+        rights = np.array([5, 0, 0, 5, 0])
+        behinds = np.array([2, 3, 4, 0, 0])
+        lefts = np.array([0, 0, 0, 0, 1])
+        test_data = np.array([index, index, fronts, rights, behinds, lefts]).T
+        test_df = pd.DataFrame(test_data, index=index, columns=columns)
+
+        test_wrapper(test_df)
 
 if __name__ == '__main__':
     main()
