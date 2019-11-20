@@ -9,7 +9,7 @@ from read_form import GetCoords
 
 def main():
     data = GetData()
-    localization_info, num_rows, num_cols, errors = GetCoords(data)
+    localization_info, participation_info, num_rows, num_cols, errors = GetCoords(data)
     if len(errors):
         print("Errors:\n{}\n".format(errors))
 
@@ -19,6 +19,8 @@ def main():
 
     # while True:
     for key in localization_info:
+        if participation_info[key] == False:
+            continue
         message = str(num_rows) + " " + str(num_cols) + " " + " ".join(str(x) for x in localization_info[key])
         print(topic_base + str(key))
         client.publish(topic_base + str(key), message)

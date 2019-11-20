@@ -27,6 +27,7 @@ def GetData(google_sheet="Graduation Localization Form (Responses)", sheet_key="
                     'What is the ID of the person sitting to the right of you? Use 0 if the person to the right of you is not participating or if there is no one sitting there.': 'right',
                     'What is the ID of the person sitting behind you? Use 0 if the person behind you is not participating or if there is no one sitting there.': 'behind',
                     'What is the ID of the person sitting to the left of you? Use 0 if the person to the left of you is not participating or if there is no one sitting there.': 'left',
+                    'Do you have a working pi and are you participating?' : 'participating'
                     }
 
     row_names = {}
@@ -50,11 +51,13 @@ def GetCoords(data, start_idx=0):
         num_cols - number of columns in seating arrangement
     '''
     localization_info = {}
+    participation_info = {}
 
     depth, width, min_depth, min_width = 0, 0, 0, 0
     next_id = data.iloc[start_idx, :]['id']
     stack = [next_id]
     localization_info[next_id] = [depth, width]
+    participation_info[next_id] = data.iloc[start_idx, :]['participating'] == 'Yes'
     visited = set()
     errors = []
     directions = ['front', 'right', 'behind', 'left']
@@ -85,6 +88,7 @@ def GetCoords(data, start_idx=0):
                 min_width = min(min_width, new_width)
                 if next_id not in visited:
                     localization_info[next_id] = [new_depth, new_width]
+                    participation_info[next_id] = data.loc[next_id, 'participating'] == 'Yes' or data.loc[next_id, 'participating'] == 1
                     stack.append(next_id)
         visited.add(cur_id)
 
@@ -97,15 +101,16 @@ def GetCoords(data, start_idx=0):
         num_rows = max(num_rows, localization_info[key][0])
         num_cols = max(num_cols, localization_info[key][1])
 
-    return localization_info, num_rows + 1, num_cols + 1, errors
+    return localization_info, participation_info, num_rows + 1, num_cols + 1, errors
 
 def test_wrapper(data):
-    localization_info, num_rows, num_cols, errors = GetCoords(data)
+    localization_info, participation_info, num_rows, num_cols, errors = GetCoords(data)
     if len(errors):
         print("Errors:\n{}\n".format(errors))
 
     print("Localization Results:")
     print("Id -> coordinate map:", localization_info)
+    print("Participating>:", participation_info)
     print("Number of rows:", num_rows)
     print("Number of columns:", num_cols)
     print()
@@ -115,14 +120,15 @@ def main():
         test_wrapper(data)
 
         index = range(1, 6)
-        columns = ["timestamp", "id", "front", "right", "behind", "left"]
+        columns = ["timestamp", "id", "front", "right", "behind", "left", "participating"]
         fronts = np.array([0, 1, 2, 3, 0])
         rights = np.array([5, 0, 0, 5, 0])
         behinds = np.array([2, 3, 4, 0, 0])
         lefts = np.array([0, 0, 0, 0, 1])
-        test_data = np.array([index, index, fronts, rights, behinds, lefts]).T
+        participating = np.array([1, 1, 1, 1, 0])
+        test_data = np.array([index, index, fronts, rights, behinds, lefts, participating]).T
         test_df = pd.DataFrame(test_data, index=index, columns=columns)
-
+        # print(test_df.head())
         test_wrapper(test_df)
 
 if __name__ == '__main__':
