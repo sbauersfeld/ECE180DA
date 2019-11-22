@@ -21,7 +21,7 @@ import RPi.GPIO as GPIO
 import time
 
 
-def display(width, height, position, fp = 1, gpio_pin, sequence)
+def display(fp = 1, gpio_pin, sequence)
 	GPIO.setup(gpio_pin, GPIO.OUT)
 
 	for i in sequence:

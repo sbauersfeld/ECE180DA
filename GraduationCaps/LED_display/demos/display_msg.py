@@ -1,5 +1,7 @@
 #!/usr/bin/python3.7
 from PIL import Image, ImageDraw, ImageFont
+import RPi.GPIO as GPIO
+import time
 
 def input_pixelator(width, height, set_font = "arial", set_scroll = False, message)
 	font = ImageFont.truetype("fonts/" set_font + ".ttf", height)
@@ -15,7 +17,7 @@ def input_pixelator(width, height, set_font = "arial", set_scroll = False, messa
 	draw.text(((W - w) / 2, (H - h) / 2 - h / 6), message, fill=1, font=font)
 
 	# save image for testing
-	im.save("msg_pixelator.png", "PNG")
+	# im.save("msg_pixelator.png", "PNG")
 
 	data = list(im.getdata())
 	return data, W
@@ -30,3 +32,13 @@ def assign_seq(data_width, rows, columns, data)
 	return sequences
 
 
+message = "hello"
+gpio_pins = []
+width = 3
+height = 3
+
+data, data_width = input_pixelator(width, height, "arial", True, message)
+sequences = assign_seq(data_width, 3, 3, data)
+
+for i in range(data_width - width + 1):
+	
