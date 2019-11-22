@@ -21,7 +21,7 @@ import RPi.GPIO as GPIO
 import time
 
 
-def display(width, height, position, fp = 1, gpio_pin, sequence)
+def display(gpio_pin, sequence, fp = 1):
 	GPIO.setup(gpio_pin, GPIO.OUT)
 
 	for i in sequence:
@@ -34,3 +34,4 @@ def display(width, height, position, fp = 1, gpio_pin, sequence)
 
 	# Turn LED off at the end
 	GPIO.output(gpio_pin, GPIO.LOW)
+
