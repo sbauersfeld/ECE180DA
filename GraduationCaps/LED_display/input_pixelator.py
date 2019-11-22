@@ -1,8 +1,8 @@
 #!/usr/bin/python3.7
 from PIL import Image, ImageDraw, ImageFont
 
-def input_pixelator(width, height, set_font = "arial", set_scroll = False, message)
-	font = ImageFont.truetype("fonts/" set_font + ".ttf", height)
+def input_pixelator(width, height, message, set_font = "arial", set_scroll = False):
+	font = ImageFont.truetype("fonts/" + set_font + ".ttf", height)
 	# 'W' is the width, it is calculated by the length of the message and add blank space if scrolling is desired
 	scroll = 2
 	if not set_scroll:
@@ -18,7 +18,15 @@ def input_pixelator(width, height, set_font = "arial", set_scroll = False, messa
 	im.save("msg_pixelator.png", "PNG")
 
 	data = list(im.getdata())
-	return data
+	return data, W
 
+def assign_seq(data_width, rows, columns, data):
+	sequences = []
+	positions = rows * columns
+	for i in range(rows):
+		for j in range(columns):
+			seq = data[i * data_width + j: i * data_width + j + data_width - (columns - 1)]
+			sequences.append(seq)
+	return sequences
 
 
