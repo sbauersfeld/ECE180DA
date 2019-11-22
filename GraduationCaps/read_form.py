@@ -3,7 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 import numpy as np
 
-def GetData(google_sheet="Graduation Localization Form (Responses)", sheet_key="../../ece180-a1520813da23.json"):
+def GetData(google_sheet="Graduation Localization Form (Responses)", sheet_key="api_key.json"):
     '''
         Get data from google form responses
         PARAMETERS:
