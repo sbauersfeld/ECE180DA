@@ -23,7 +23,7 @@ def main():
             continue
         message = str(num_rows) + " " + str(num_cols) + " " + " ".join(str(x) for x in localization_info[key])
         print(topic_base + str(key))
-        client.publish(topic_base + str(key), message)
+        client.publish(topic_base + str(key), message, 1)
         # time.sleep(3)
 
 if __name__ == '__main__':

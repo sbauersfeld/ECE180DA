@@ -9,6 +9,7 @@ child = pexpect.spawn("bluetoothctl")
 print("Removing old Connections")
 child.sendline("remove {0}".format(DEVICE))
 time.sleep(2)
+
 print("Pairing to"),
 print(DEVICE)
 child.sendline("agent on")
@@ -20,11 +21,12 @@ time.sleep(1)
 child.sendline("scan off")
 child.sendline("pair {0}".format(DEVICE))
 time.sleep(1)
-code=raw_input("Code: ")
-child.sendline("{0}".format(code))
 child.expect("Pairing successful", timeout=20)
 print("Paried "),
 print(DEVICE)
+
+child.sendline("char-write-req 0x0026 1234")
+time.sleep(1)
 child.sendline("disconnect {0}".format(DEVICE))
 time.sleep(1)
 child.sendline("quit")
