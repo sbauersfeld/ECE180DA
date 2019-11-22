@@ -1,13 +1,8 @@
-# Python script to set the time on the Hexiwear
 import sys
-import pexpect
-import time
 import paho.mqtt.client as mqtt
-from time import gmtime, strftime
 
 class Client:
     def __init__(self, my_id):
-        self.got_message = False
         self.id = my_id
         self.num_rows = 0
         self.num_cols = 0
@@ -21,7 +16,8 @@ class Client:
         self.num_rows = msg[0]
         self.num_cols = msg[1]
         self.coords = msg[2:]
-        self.got_message = True
+        client.disconnect()
+        client.loop_stop()
 
     def get_info(self):
         client = mqtt.Client(self.id)
@@ -31,18 +27,7 @@ class Client:
         client.subscribe(topic)
 
         client.on_message=self.on_message
-        client.loop_start()
-
-        try:
-            while True:
-                if self.got_message:
-                    break
-                time.sleep(1)
-        except KeyboardInterrupt:
-            print("exiting")
-            
-        client.disconnect()
-        client.loop_stop()
+        client.loop_forever()
 
 def main():
     DEVICE = sys.argv[1]
