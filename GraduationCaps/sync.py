@@ -11,6 +11,8 @@ synced_time = datetime.fromtimestamp(datetime.now().timestamp() + response.offse
 print("My device's time:\t\t", datetime.now().time())
 print("Synced time:\t\t\t", synced_time.time())
 
+print(datetime.now().timestamp())
+
 def printTime(offset):
     synced_time = datetime.fromtimestamp(datetime.now().timestamp() + offset)
     print("Synced time 3 seconds later:\t", synced_time.time())
@@ -20,4 +22,4 @@ def printTime(offset):
 # run_at = datetime.fromtimestamp(synced_time + 10)
 # delay = (run_at - (datetime.now().timestamp() + response.offset)).total_seconds()
 
-threading.Timer(3, printTime, args=[response.offset]).start()
+# threading.Timer(3, printTime, args=[response.offset]).start()
