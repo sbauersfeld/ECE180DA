@@ -3,13 +3,6 @@
 '''
 Displays sequence by turning the LED ON/OFF 
 Recieves the following parameters
-
-- width: width of LED display
-
-- height height of LED display
-
-- position: position of LED display (calculated by row * column + column)
-
 - fp: time per frame in seconds
 
 - gpio_pins: gpio pins for each led connected to the RPi
@@ -21,16 +14,24 @@ import RPi.GPIO as GPIO
 import time
 
 
-def display(fp = 1, gpio_pin, sequence)
-	GPIO.setup(gpio_pin, GPIO.OUT)
+def display(gpio_pins, sequence, fp = 1):
+	#Input data to LED
+	GPIO.setmode(GPIO.BCM)
+	GPIO.setwarnings(False)
+
+	for j in gpio_pins:
+		GPIO.setup(j, GPIO.OUT)
 
 	for i in sequence:
 		if i == 1:
-			GPIO.output(gpio_pin, GPIO.HIGH)
-			time.sleep(fp)
+			for j in gpio_pins:
+				GPIO.output(j, GPIO.HIGH)
+				time.sleep(fp)
 		else:
-			GPIO.output(gpio_pin, GPIO.LOW)
+			for j in gpio_pins:
+			GPIO.output(j, GPIO.LOW)
 			time.sleep(fp)
 
 	# Turn LED off at the end
-	GPIO.output(gpio_pin, GPIO.LOW)
+	for j in gpio_pins:
+		GPIO.output(j, GPIO.LOW)
