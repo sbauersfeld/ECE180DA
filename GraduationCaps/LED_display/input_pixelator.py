@@ -23,7 +23,6 @@ def input_pixelator(width, height, message, set_font, set_scroll = True):
 
 def assign_seq(data_width, rows, columns, data):
 	sequences = []
-	positions = rows * columns
 	for i in range(rows):
 		for j in range(columns):
 			seq = data[i * data_width + j: i * data_width + j + data_width - (columns - 1)]
