@@ -1,8 +1,14 @@
 #!/usr/bin/python3.7
 from PIL import Image, ImageDraw, ImageFont
 
+<<<<<<< HEAD
 def input_pixelator(width, height, message, set_font = "arial", set_scroll = False):
 	font = ImageFont.truetype("fonts/" + set_font + ".ttf", height)
+=======
+def input_pixelator(width, height, message, set_font, set_scroll = True):
+	font_size = height // 10 * 10 + 10 
+	font = ImageFont.truetype(set_font, font_size)
+>>>>>>> 32c73b49da52a6fe5000b650c027e52b4c5dc272
 	# 'W' is the width, it is calculated by the length of the message and add blank space if scrolling is desired
 	scroll = 2
 	if not set_scroll:
@@ -12,13 +18,14 @@ def input_pixelator(width, height, message, set_font = "arial", set_scroll = Fal
 	im = Image.new("1", (W, H), 0)
 	draw = ImageDraw.Draw(im)
 	w, h = draw.textsize(message, font)
-	draw.text(((W - w) / 2, (H - h) / 2 - h / 6), message, fill=1, font=font)
+	draw.text(((W - w) / 2, (H - h) / 2 - h / 5), message, fill=1, font=font)
 
 	# save image for testing
 	im.save("msg_pixelator.png", "PNG")
 
 	data = list(im.getdata())
 	return data, W
+<<<<<<< HEAD
 
 def assign_seq(data_width, rows, columns, data):
 	sequences = []
@@ -29,4 +36,14 @@ def assign_seq(data_width, rows, columns, data):
 			sequences.append(seq)
 	return sequences
 
+=======
+>>>>>>> 32c73b49da52a6fe5000b650c027e52b4c5dc272
 
+def assign_seq(data_width, rows, columns, data):
+	sequences = []
+	positions = rows * columns
+	for i in range(rows):
+		for j in range(columns):
+			seq = data[i * data_width + j: i * data_width + j + data_width - (columns - 1)]
+			sequences.append(seq)
+	return sequences
