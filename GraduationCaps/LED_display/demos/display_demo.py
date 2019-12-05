@@ -22,16 +22,15 @@ def display(gpio_pins, sequence, fp = 1):
 	for j in gpio_pins:
 		GPIO.setup(j, GPIO.OUT)
 
-	for i in sequence:
-		if i == 1:
-			for j in gpio_pins:
-				GPIO.output(j, GPIO.HIGH)
-				time.sleep(fp)
-		else:
-			for j in gpio_pins:
-				GPIO.output(j, GPIO.LOW)
-				time.sleep(fp)
+	for i in range(len(sequence[0])):
+		for j in range(len(gpio_pins)):
+			if sequence[j][i] == 1:
+				GPIO.output(gpio_pins[j], GPIO.HIGH)
+			else:
+				GPIO.output(gpio_pins[j], GPIO.LOW)
+		time.sleep(fp)
 
 	# Turn LED off at the end
 	for j in gpio_pins:
 		GPIO.output(j, GPIO.LOW)
+
