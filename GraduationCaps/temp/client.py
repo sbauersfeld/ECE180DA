@@ -5,6 +5,7 @@ from datetime import datetime
 import ntplib as ntp
 import threading
 import time
+from multiprocessing import Process
 from display import *
 from input_pixelator import *
 
@@ -13,7 +14,10 @@ def on_message(client, userdata, msg):
     global MSG
     MSG = msg.payload.decode()
 
-def printTime(offset, client):
+def printTime(sequences, pos, offset, client):
+    p = Process(target=display, args=([2], sequences[pos]))
+    p.start()
+
     global MSG
     print("Time offset:\t {:.4f}".format(offset))
     client.loop_start()
@@ -33,10 +37,11 @@ def printTime(offset, client):
         if synced_end_time != None and timestamp >= synced_end_time:
             print("Stopping at:", synced_time.time())
             client.loop_stop()
+            p.terminate()
             break
-        else:
-            print("Synced time:\t", synced_time.time())
-            time.sleep(1.0 - ((time.time() - starttime) % 1.0))
+
+        print("Synced time:\t", synced_time.time())
+        time.sleep(1.0 - ((time.time() - starttime) % 1.0))
 
 def main():
     global MSG
@@ -82,7 +87,8 @@ def main():
     synced_delay = float(synced_start_time) - (datetime.now().timestamp() + response.offset)
 
     # Execute function
-    threading.Timer(synced_delay, display, args=[[2], sequences[pos]]).start()
+    # threading.Timer(synced_delay, display, args=[[2], sequences[pos]]).start()
+    threading.Timer(synced_delay, printTime, args=[sequences, pos, response.offset, client]).start()
 
 if __name__ == '__main__':
     main()

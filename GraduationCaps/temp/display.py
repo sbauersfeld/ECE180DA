@@ -24,11 +24,12 @@ def display(gpio_pins, sequence, fp = 1):
 
 	# Activate according to sequence
 	for i in sequence:
-		for j in gpio_pins:
-			if i:
-				GPIO.output(j, GPIO.HIGH)
-			else:
-				GPIO.output(j, GPIO.LOW)
+		print(i)
+		# for j in gpio_pins:
+		# 	if i:
+		# 		GPIO.output(j, GPIO.HIGH)
+		# 	else:
+		# 		GPIO.output(j, GPIO.LOW)
 		time.sleep(fp) # this was a bug in original files
 
 	# Turn LED off at the end
