@@ -5,18 +5,18 @@ import time
 DEVICE = sys.argv[1]
 child = pexpect.spawn("gatttool -I")
 
-# Connect to the device.
-print("Removing old Connections")
-child.sendline("remove {0}".format(DEVICE))
-time.sleep(2)
-
-print("Pairing to"),
+# Connect to device
+print("Connecting to"),
 print(DEVICE)
-child.sendline("connect {0}".format(DEVICE))
-child.expect(["Connection successful","Function not implemented"], timeout=5)
+while True:
+    child.sendline("connect {}".format(DEVICE))
+    res = child.expect(["Connection successful","Function not implemented"], timeout=5)
+    if res == 0:
+        break
 print("Connected!")
 
-command = "char-read-hnd 65"
+# Read characteristic
 while True:
-    child.sendline(command)
+    child.sendline("char-read-hnd 0x0026")
+    res = child.expect(["Characteristic value/descriptor: 01"], timeout=10)
     time.sleep(5)
