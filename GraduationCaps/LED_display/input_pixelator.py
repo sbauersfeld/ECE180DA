@@ -13,7 +13,7 @@ def input_pixelator(width, height, message, set_font, set_scroll = True):
 	im = Image.new("1", (W, H), 0)
 	draw = ImageDraw.Draw(im)
 	w, h = draw.textsize(message, font)
-	draw.text(((W - w) / 2, (H - h) / 2 - h / 5), message, fill=1, font=font)
+	draw.text(((W - w) / 2, (H - h) / 2 - h / 4), message, fill=1, font=font)
 
 	# save image for testing
 	im.save("msg_pixelator.png", "PNG")
