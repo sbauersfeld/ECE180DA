@@ -19,6 +19,7 @@ def display(gpio_pins, sequence, fp = 1):
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setwarnings(False)
 
+	# Set up GPIO pins
 	for j in gpio_pins:
 		GPIO.setup(j, GPIO.OUT)
 
@@ -30,7 +31,7 @@ def display(gpio_pins, sequence, fp = 1):
 		# 		GPIO.output(j, GPIO.HIGH)
 		# 	else:
 		# 		GPIO.output(j, GPIO.LOW)
-		time.sleep(fp) # this was a bug in original files
+		time.sleep(fp)
 
 	# Turn LED off at the end
 	for j in gpio_pins:

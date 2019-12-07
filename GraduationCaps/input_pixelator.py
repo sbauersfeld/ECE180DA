@@ -7,7 +7,7 @@ def input_pixelator(width, height, message, set_font, set_scroll = True):
 
 	# 'W' is the width, calculated by the length of the message
 	# Add blank space if scrolling is desired
-	scroll = 2 # doesn't this need to be just 1?
+	scroll = 2
 	if not set_scroll:
 	    scroll = 0
 	W, H = (font.getsize(message)[0] + scroll * width, height)
@@ -28,7 +28,6 @@ def assign_seq(data_width, rows, columns, data):
 	sequences = []
 	for i in range(rows):
 		for j in range(columns):
-			# shouldn't this be just (...data_width - columns)?
 			seq = data[i * data_width + j: i * data_width + j + data_width - (columns - 1)]
 			sequences.append(seq)
 	return sequences
