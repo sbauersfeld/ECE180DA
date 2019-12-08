@@ -23,30 +23,15 @@ def main():
     synced_time = datetime.fromtimestamp(synced_init_time)
     print("Run Function at:\t", synced_time.time())
 
-    for key in localization_info:
-        if participation_info[key] == False:
-            continue
-        message = str(synced_init_time) + " " + str(num_rows) + " " + str(num_cols) + " " + " ".join(str(x) for x in localization_info[key])
-        print(topic_base + str(key))
-        ret = client.publish(topic_base + str(key), message)
-        ret.wait_for_publish()
-
-    time.sleep(15)
-    message = "Hello"
-    for key in localization_info:
-        ret = client.publish(topic_base + str(key), message)
-        ret.wait_for_publish()
-    print("Said hello at:", datetime.fromtimestamp(datetime.now().timestamp() + response.offset).time())
-
-    time.sleep(5)
-
-    end_time = int(datetime.now().timestamp() + response.offset + 5)
-    message = "Stop " + str(end_time)
-    for key in localization_info:
-        ret = client.publish(topic_base + str(key), message)
-        ret.wait_for_publish()
-    synced_end_time = datetime.fromtimestamp(end_time)
-    print("Stop at:", synced_end_time.time())
+    while True:
+        for key in localization_info:
+            if participation_info[key] == False:
+                continue
+            message = str(synced_init_time) + " " + str(num_rows) + " " + str(num_cols) + " " + " ".join(str(x) for x in localization_info[key])
+            print(topic_base + str(key))
+            ret = client.publish(topic_base + str(key), message)
+            ret.wait_for_publish()
+        time.sleep(5)
 
 if __name__ == '__main__':
     main()

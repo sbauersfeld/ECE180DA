@@ -110,7 +110,7 @@ def test_wrapper(data):
 
     print("Localization Results:")
     print("Id -> coordinate map:", localization_info)
-    print("Participating>:", participation_info)
+    # print("Participating:", participation_info)
     print("Number of rows:", num_rows)
     print("Number of columns:", num_cols)
     print()
@@ -119,17 +119,17 @@ def main():
         data = GetData()
         test_wrapper(data)
 
-        index = range(1, 6)
-        columns = ["timestamp", "id", "front", "right", "behind", "left", "participating"]
-        fronts = np.array([0, 1, 2, 3, 0])
-        rights = np.array([5, 0, 0, 5, 0])
-        behinds = np.array([2, 3, 4, 0, 0])
-        lefts = np.array([0, 0, 0, 0, 1])
-        participating = np.array([1, 1, 1, 1, 0])
-        test_data = np.array([index, index, fronts, rights, behinds, lefts, participating]).T
-        test_df = pd.DataFrame(test_data, index=index, columns=columns)
-        # print(test_df.head())
-        test_wrapper(test_df)
+        # index = range(1, 6)
+        # columns = ["timestamp", "id", "front", "right", "behind", "left", "participating"]
+        # fronts = np.array([0, 1, 2, 3, 0])
+        # rights = np.array([5, 0, 0, 5, 0])
+        # behinds = np.array([2, 3, 4, 0, 0])
+        # lefts = np.array([0, 0, 0, 0, 1])
+        # participating = np.array([1, 1, 1, 1, 0])
+        # test_data = np.array([index, index, fronts, rights, behinds, lefts, participating]).T
+        # test_df = pd.DataFrame(test_data, index=index, columns=columns)
+        # # print(test_df.head())
+        # test_wrapper(test_df)
 
 if __name__ == '__main__':
     main()
