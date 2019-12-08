@@ -14,8 +14,8 @@ def on_message(client, userdata, msg):
     global MSG
     MSG = msg.payload.decode()
 
-def printTime(sequences, pos, offset, client):
-    p = Process(target=display, args=([2], sequences[pos]))
+def printTime(pins, sequences, pos, offset, client):
+    p = Process(target=display, args=(pins, sequences[pos]))
     p.start()
 
     global MSG
@@ -52,6 +52,7 @@ def main():
     client.subscribe("ee180d/group4/" + DEVICE)
 
     # Listen for position details
+    print("Listening...")
     client.loop_start()
     msg = None
     while True:
@@ -63,7 +64,7 @@ def main():
     print(msg)
 
     # Register position detail
-    message = "Epstein didn't kill himself."
+    message = "UCLA"
     synced_start_time = msg[0]
     num_rows = msg[1]
     num_cols = msg[2]
@@ -75,10 +76,21 @@ def main():
 
     # Get pixel grid
     ncol = int(num_cols)
-    nrow = int(num_rows)
+    # nrow = int(num_rows)
+    nrow = 5 # For Demo purposes
     data, data_width = input_pixelator(ncol, nrow, message, "fonts/font.ttf")
     sequences = assign_seq(data_width, nrow, ncol, data)
-    pos = int(coords[1]) * ncol + int(coords[0])
+    pos = int(coords[0]) * ncol + int(coords[1])
+    pins = [2,3,14,15,4]
+
+    # For Demo purposes
+    temp = []
+    for j in range(ncol):
+        seq = []
+        for i in range(nrow):
+            seq.append(sequences[i*ncol+j])
+        temp.append(seq)
+    sequences = temp
 
     # NTP Synchronization
     ntp_pool = 'pool.ntp.org'
@@ -87,8 +99,9 @@ def main():
     synced_delay = float(synced_start_time) - (datetime.now().timestamp() + response.offset)
 
     # Execute function
-    # threading.Timer(synced_delay, display, args=[[2], sequences[pos]]).start()
-    threading.Timer(synced_delay, printTime, args=[sequences, pos, response.offset, client]).start()
+    # threading.Timer(synced_delay, display, args=[pins, sequences[pos]]).start()
+    args = [pins, sequences, pos, response.offset, client]
+    threading.Timer(synced_delay, printTime, args=args).start()
 
 if __name__ == '__main__':
     main()
