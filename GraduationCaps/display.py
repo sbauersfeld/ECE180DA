@@ -27,7 +27,7 @@ def display(gpio_pins, sequence, fp = 1):
 	# Changed for Demo purposes
 	for i in range(len(sequence[0])):
 		for row, pin in enumerate(gpio_pins):
-			print(sequence[row][i])
+			# print(sequence[row][i])
 			if sequence[row][i]:
 				GPIO.output(pin, GPIO.HIGH)
 			else:
