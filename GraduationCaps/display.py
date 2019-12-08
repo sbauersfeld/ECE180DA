@@ -25,14 +25,15 @@ def display(gpio_pins, sequence, fp = 1):
 
 	# Activate according to sequence
 	# Changed for Demo purposes
-	for i in range(len(sequence[0])):
-		for row, pin in enumerate(gpio_pins):
-			# print(sequence[row][i])
-			if sequence[row][i]:
-				GPIO.output(pin, GPIO.HIGH)
-			else:
-				GPIO.output(pin, GPIO.LOW)
-		time.sleep(fp)
+	while True:
+		for i in range(len(sequence[0])):
+			for row, pin in enumerate(gpio_pins):
+				# print(sequence[row][i])
+				if sequence[row][i]:
+					GPIO.output(pin, GPIO.HIGH)
+				else:
+					GPIO.output(pin, GPIO.LOW)
+			time.sleep(fp)
 
 	# Turn LED off at the end
 	for j in gpio_pins:
