@@ -78,8 +78,8 @@ def main():
     ncol = int(num_cols)
     # nrow = int(num_rows)
     nrow = 5 # For Demo purposes
-    data, data_width = input_pixelator(ncol, nrow, message, "fonts/font.ttf")
-    sequences = assign_seq(data_width, nrow, ncol, data)
+    data, data_width = input_pixelator(2*ncol, nrow, message, "fonts/font.ttf")
+    sequences = assign_seq(data_width, nrow, 2*ncol, data)
     pos = int(coords[0]) * ncol + int(coords[1])
     pins = [2,3,14,15,4,17,18,23,27,22]
 
@@ -88,9 +88,9 @@ def main():
     for j in range(ncol):
         seq = []
         for i in range(nrow):
-            seq.append(sequences[i*ncol+2*j])
+            seq.append(sequences[i*(2*ncol)+(2*j)])
         for i in range(nrow):
-            seq.append(sequences[i*ncol+2*j+1])
+            seq.append(sequences[i*(2*ncol)+(2*j+1)])
         temp.append(seq)
     sequences = temp
 
