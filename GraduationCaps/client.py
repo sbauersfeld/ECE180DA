@@ -53,6 +53,11 @@ def main():
     client.connect("broker.hivemq.com")
     client.subscribe("ee180d/group4/" + DEVICE)
 
+    # NTP Synchronization
+    ntp_pool = 'pool.ntp.org'
+    call = ntp.NTPClient()
+    response = call.request(ntp_pool, version=3)
+
     # Listen for position details
     print("Listening...")
     client.loop_start()
@@ -96,16 +101,11 @@ def main():
         temp.append(seq)
     sequences = temp
 
-    # NTP Synchronization
-    ntp_pool = 'pool.ntp.org'
-    call = ntp.NTPClient()
-    response = call.request(ntp_pool, version=3)
-    synced_delay = float(synced_start_time) - (datetime.now().timestamp() + response.offset)
-
     # Execute function
-    # threading.Timer(synced_delay, display, args=[pins, sequences[pos]]).start()
     args = [pins, sequences, pos, response.offset, client]
+    synced_delay = float(synced_start_time) - (datetime.now().timestamp() + response.offset)
     threading.Timer(synced_delay, printTime, args=args).start()
+    # threading.Timer(synced_delay, display, args=[pins, sequences[pos]]).start()
 
 if __name__ == '__main__':
     main()
