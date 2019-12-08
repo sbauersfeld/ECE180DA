@@ -37,3 +37,16 @@ def display(gpio_pins, sequence, fp = 1):
 	# Turn LED off at the end
 	for j in gpio_pins:
 		GPIO.output(j, GPIO.LOW)
+
+def display_off(gpio_pins):
+	#Input data to LED
+	GPIO.setmode(GPIO.BCM)
+	GPIO.setwarnings(False)
+
+	# Set up GPIO pins
+	for j in gpio_pins:
+		GPIO.setup(j, GPIO.OUT)
+
+	# Turn LED off at the end
+	for j in gpio_pins:
+		GPIO.output(j, GPIO.LOW)

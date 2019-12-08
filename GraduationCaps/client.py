@@ -36,12 +36,14 @@ def printTime(pins, sequences, pos, offset, client):
 
         if synced_end_time != None and timestamp >= synced_end_time:
             print("Stopping at:", synced_time.time())
-            client.loop_stop()
-            p.terminate()
             break
 
         print("Synced time:\t", synced_time.time())
         time.sleep(1.0 - ((time.time() - starttime) % 1.0))
+
+    client.loop_stop()
+    p.terminate()
+    display_off(pins)
 
 def main():
     global MSG
